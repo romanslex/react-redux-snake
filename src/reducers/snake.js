@@ -1,12 +1,12 @@
 import {createReducer} from '../helpers/createReducer';
-import {CHANGE_DIRECTION, MOVE} from '../actions';
+import {CHANGE_DIRECTION, FOOD_EATEN, MOVE} from '../actions';
 
 const initialState = [
   {
     x: 0,
     y: 0,
-    direction: 'right'
-  }
+    direction: 'right',
+  },
 ];
 
 export const snake = createReducer(initialState, {
@@ -34,5 +34,15 @@ export const snake = createReducer(initialState, {
         return newState;
     }
     return newState;
-  }
+  },
+  [FOOD_EATEN](state) {
+    const newState = [...state];
+    const lastItem = newState[newState.length - 1];
+    newState.push({
+      x: lastItem.x - 20,
+      y: lastItem.y - 20,
+      direction: lastItem.direction,
+    });
+    return newState;
+  },
 });

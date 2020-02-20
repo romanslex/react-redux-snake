@@ -3,11 +3,11 @@ import {getRandom} from '../helpers/getRandom';
 
 export const CHANGE_DIRECTION = 'CHANGE_DIRECTION';
 export const MOVE = 'MOVE';
-export const FOOD_MOVE = 'FOOD_MOVE';
+export const FOOD_EATEN = 'FOOD_MOVE';
 
 export const changeDirection = makeActionCreator(CHANGE_DIRECTION, 'direction');
 export const move = makeActionCreator(MOVE);
-export const foodMove = makeActionCreator(FOOD_MOVE, 'x', 'y');
+export const foodEaten = makeActionCreator(FOOD_EATEN, 'x', 'y');
 
 export const snakeMove = () => (dispatch, getState) => {
   const step = 20;
@@ -35,7 +35,7 @@ export const snakeMove = () => (dispatch, getState) => {
     let foodY = getRandom(0, 540);
     foodX -= foodX % step;
     foodY -= foodY % step;
-    dispatch(foodMove(foodX, foodY));
+    dispatch(foodEaten(foodX, foodY));
   }
 
   dispatch(move());
