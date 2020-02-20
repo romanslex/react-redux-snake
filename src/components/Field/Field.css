@@ -1,0 +1,6 @@
+.field {
+    width: 1000px;
+    height: 600px;
+    border: 20px solid red;
+    position: relative;
+}

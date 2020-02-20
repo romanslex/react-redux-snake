@@ -1,11 +1,10 @@
 import React from 'react';
+import Field from './Field/Field';
 
-function App() {
+export default () => {
   return (
     <div className="app">
-      Hi
+      <Field/>
     </div>
   );
-}
-
-export default App;
+};
