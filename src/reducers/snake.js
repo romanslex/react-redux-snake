@@ -1,5 +1,5 @@
 import {createReducer} from '../helpers/createReducer';
-import {CHANGE_DIRECTION, FOOD_EATEN, MOVE} from '../actions';
+import {CHANGE_DIRECTION, FOOD_EATEN, MOVE, RESTART} from '../actions';
 
 const initialState = [
   {
@@ -9,8 +9,21 @@ const initialState = [
   },
 ];
 
+const oppositeDirections = {
+  left: 'right',
+  right: 'left',
+  up: 'down',
+  down: 'up'
+};
+
 export const snake = createReducer(initialState, {
+  [RESTART]() {
+    return [{x: 0, y: 0, direction: 'right'}];
+  },
   [CHANGE_DIRECTION](state, action) {
+    if (state.length > 1 && oppositeDirections[state[0].direction] === action.direction)
+      return state;
+
     const newState = [...state];
     newState[0].direction = action.direction;
     return newState;
