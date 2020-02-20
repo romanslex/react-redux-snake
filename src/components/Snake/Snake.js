@@ -6,14 +6,19 @@ import {
   snakeMove,
 } from '../../actions';
 
-const Snake = ({snake, dispatch}) => {
+const Snake = ({snake, dispatch, isGameOver}) => {
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      dispatch(snakeMove());
-    }, 80);
+    let interval;
+    if (!isGameOver) {
+      interval = setInterval(() => {
+        dispatch(snakeMove());
+      }, 80);
+    } else {
+      clearInterval(interval);
+    }
     return () => clearInterval(interval);
-  }, [dispatch]);
+  }, [dispatch, isGameOver]);
 
   useEffect(() => {
     function changeDirection(event) {
@@ -54,5 +59,8 @@ const Snake = ({snake, dispatch}) => {
 };
 
 export default connect(
-    state => ({snake: state.snake}),
+    state => ({
+      snake: state.snake,
+      isGameOver: state.general.isGameOver
+    }),
 )(Snake);
