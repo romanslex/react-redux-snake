@@ -24,4 +24,5 @@ html, body, #root, .app {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 }

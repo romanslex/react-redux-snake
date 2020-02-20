@@ -2,7 +2,7 @@ import {createReducer} from '../helpers/createReducer';
 import {SET_GAME_OVER} from '../actions';
 
 const initialState = {
-  isGameOver: false
+  isGameOver: true
 };
 
 export const general = createReducer(initialState, {
