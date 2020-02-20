@@ -1,12 +1,21 @@
 import React, {useEffect} from 'react';
 import {connect} from 'react-redux';
 import './Snake.css';
-import {changeDirection as changeDirectionAction} from '../../actions';
+import {
+  changeDirection as changeDirectionAction,
+  snakeMove,
+} from '../../actions';
 
 const Snake = ({snake, dispatch}) => {
 
   useEffect(() => {
-    console.log('use effect');
+    const interval = setInterval(() => {
+      dispatch(snakeMove());
+    }, 80);
+    return () => clearInterval(interval);
+  }, [dispatch]);
+
+  useEffect(() => {
     function changeDirection(event) {
       let direction = '';
       switch (event.code) {
@@ -30,7 +39,7 @@ const Snake = ({snake, dispatch}) => {
     document.addEventListener('keydown', changeDirection);
 
     return () => document.removeEventListener('keydown', changeDirection);
-  });
+  }, [dispatch]);
 
   return (
       <>
