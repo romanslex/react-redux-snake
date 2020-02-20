@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import {connect} from 'react-redux';
 import './Snake.css';
 import {
-  changeDirection as changeDirectionAction,
+  changeHeadDirection,
   snakeMove,
 } from '../../actions';
 
@@ -39,7 +39,7 @@ const Snake = ({snake, dispatch, isGameOver}) => {
         default:
           direction = 'stop';
       }
-      dispatch(changeDirectionAction(direction));
+      dispatch(changeHeadDirection(direction));
     }
     document.addEventListener('keydown', changeDirection);
 
