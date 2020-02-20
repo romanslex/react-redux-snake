@@ -16,31 +16,51 @@ export const snake = createReducer(initialState, {
     return newState;
   },
   [MOVE](state) {
-    let newState = [...state];
-    switch (newState[0].direction) {
-      case 'right':
-        newState[0].x += 20;
-        break;
-      case 'left':
-        newState[0].x -= 20;
-        break;
-      case 'up':
-        newState[0].y -= 20;
-        break;
-      case 'down':
-        newState[0].y += 20;
-        break;
-      default:
-        return newState;
-    }
-    return newState;
+    return state.reverse().map((i, index) => {
+      switch (i.direction) {
+        case 'right':
+          i.x += 20;
+          break;
+        case 'left':
+          i.x -= 20;
+          break;
+        case 'up':
+          i.y -= 20;
+          break;
+        case 'down':
+          i.y += 20;
+          break;
+      }
+
+      if (index === (state.length - 1))
+        return i;
+
+      i.direction = state[index + 1].direction;
+      return i;
+    }).reverse();
   },
   [FOOD_EATEN](state) {
     const newState = [...state];
     const lastItem = newState[newState.length - 1];
+    let x = lastItem.x;
+    let y = lastItem.y;
+    switch (lastItem.direction) {
+      case 'right':
+        x = lastItem.x - 20;
+        break;
+      case 'left':
+        x = lastItem.x + 20;
+        break;
+      case 'up':
+        y = lastItem.y + 20;
+        break;
+      case 'down':
+        y = lastItem.y - 20;
+        break;
+    }
     newState.push({
-      x: lastItem.x - 20,
-      y: lastItem.y - 20,
+      x: x,
+      y: y,
       direction: lastItem.direction,
     });
     return newState;
