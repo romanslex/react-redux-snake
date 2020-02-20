@@ -3,13 +3,15 @@ import {getRandom} from '../helpers/getRandom';
 
 export const CHANGE_DIRECTION = 'CHANGE_DIRECTION';
 export const MOVE = 'MOVE';
-export const FOOD_EATEN = 'FOOD_MOVE';
+export const FOOD_EATEN = 'FOOD_EATEN';
 export const SET_GAME_OVER = 'SET_GAME_OVER';
+export const RESTART = 'RESTART';
 
 export const changeDirection = makeActionCreator(CHANGE_DIRECTION, 'direction');
 export const move = makeActionCreator(MOVE);
 export const foodEaten = makeActionCreator(FOOD_EATEN, 'x', 'y');
 export const setGameOver = makeActionCreator(SET_GAME_OVER, 'value');
+export const restart = makeActionCreator(RESTART);
 
 export const snakeMove = () => (dispatch, getState) => {
   const step = 20;
@@ -48,6 +50,7 @@ export const snakeMove = () => (dispatch, getState) => {
 
   if ([-20, 960].includes(nextX) || [-20, 560].includes(nextY)) {
     dispatch(setGameOver(true));
+    return;
   }
 
   dispatch(move());
