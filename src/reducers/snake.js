@@ -1,5 +1,11 @@
 import {createReducer} from '../helpers/createReducer';
-import {CHANGE_DIRECTION, FOOD_EATEN, MOVE, RESTART} from '../actions';
+import {
+  ADD_HEAD_DIRECTION,
+  FOOD_EATEN,
+  MOVE,
+  RESTART,
+  SET_HEAD_DIRECTIONS,
+} from '../actions';
 
 const initialState = [
   {
@@ -71,7 +77,10 @@ export const headDirections = createReducer([], {
   [RESTART]() {
     return [];
   },
-  [CHANGE_DIRECTION](state, action) {
+  [ADD_HEAD_DIRECTION](state, action) {
     return [...state, action.direction];
+  },
+  [SET_HEAD_DIRECTIONS](state, action) {
+    return action.directions;
   }
 });

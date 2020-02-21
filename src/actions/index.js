@@ -1,14 +1,14 @@
 import {makeActionCreator} from '../helpers/makeActionCreator';
 import {getRandom} from '../helpers/getRandom';
 
-export const CHANGE_DIRECTION = 'CHANGE_DIRECTION';
+export const ADD_HEAD_DIRECTION = 'ADD_HEAD_DIRECTION';
 export const MOVE = 'MOVE';
 export const FOOD_EATEN = 'FOOD_EATEN';
 export const SET_GAME_OVER = 'SET_GAME_OVER';
 export const RESTART = 'RESTART';
 export const SET_HEAD_DIRECTIONS = 'SET_HEAD_DIRECTIONS';
 
-export const changeDirection = makeActionCreator(CHANGE_DIRECTION, 'direction');
+export const addHeadDirection = makeActionCreator(ADD_HEAD_DIRECTION, 'direction');
 export const move = makeActionCreator(MOVE, 'direction');
 export const foodEaten = makeActionCreator(FOOD_EATEN, 'x', 'y');
 export const setGameOver = makeActionCreator(SET_GAME_OVER, 'value');
@@ -17,14 +17,16 @@ export const setHeadDirections = makeActionCreator(SET_HEAD_DIRECTIONS, 'directi
 
 export const snakeMove = () => (dispatch, getState) => {
   const step = 20;
-  const {snake, food, headDirections} = getState();
+  const {snake, food} = getState();
+  const headDirections = [...getState().headDirections];
+
   let nextX = snake[0].x;
   let nextY = snake[0].y;
 
   let direction = snake[0].direction;
   if (headDirections.length > 0) {
     direction = headDirections.shift();
-    dispatch(setHeadDirections([...headDirections]));
+    dispatch(setHeadDirections(headDirections));
   }
 
   switch (direction) {
@@ -60,7 +62,7 @@ export const snakeMove = () => (dispatch, getState) => {
   dispatch(move(direction));
 };
 
-export const changeHeadDirection = direction => (dispatch, getState) => {
+export const addDirectionToQueue = direction => (dispatch, getState) => {
   const oppositeDirections = {
     left: 'right',
     right: 'left',
@@ -74,7 +76,7 @@ export const changeHeadDirection = direction => (dispatch, getState) => {
       : snake[0].direction;
 
   if (direction !== lastItem && oppositeDirections[direction] !== lastItem) {
-    dispatch(changeDirection(direction));
+    dispatch(addHeadDirection(direction));
   }
 };
 
