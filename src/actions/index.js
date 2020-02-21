@@ -44,10 +44,6 @@ export const snakeMove = () => (dispatch, getState) => {
       break;
   }
 
-  if (nextY === food.y && nextX === food.x) {
-    eatFood(snake, step, dispatch);
-  }
-
   snake.forEach(i => {
     if (i.x === nextX && i.y === nextY) {
       dispatch(setGameOver(true));
@@ -60,6 +56,10 @@ export const snakeMove = () => (dispatch, getState) => {
   }
 
   dispatch(move(direction));
+
+  if (nextY === food.y && nextX === food.x) {
+    eatFood(snake, step, dispatch);
+  }
 };
 
 export const addDirectionToQueue = direction => (dispatch, getState) => {
@@ -83,10 +83,8 @@ export const addDirectionToQueue = direction => (dispatch, getState) => {
 const eatFood = (snake, step, dispatch) => {
   let flag = true;
   let foodX, foodY;
-  console.group('before');
 
   while (flag){
-    console.log('tick');
 
     foodX = getRandom(0, 240);
     foodY = getRandom(0, 240);
@@ -95,11 +93,9 @@ const eatFood = (snake, step, dispatch) => {
     foodY -= foodY % step;
 
     const result = snake.filter(item => item.x === foodX && item.y === foodY);
-    console.log({foodY, foodX, result, snake});
 
     if (result.length === 0)
       flag = false;
   }
-  console.groupEnd();
   dispatch(foodEaten(foodX, foodY));
 };

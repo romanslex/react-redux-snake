@@ -12,6 +12,7 @@ const initialState = [
     x: 0,
     y: 0,
     direction: 'right',
+    isVisible: true
   },
 ];
 
@@ -23,6 +24,7 @@ export const snake = createReducer(initialState, {
     const newState = [...state];
     newState[0].direction = action.direction;
     return newState.reverse().map((i, index) => {
+      i.isVisible = true;
       switch (i.direction) {
         case 'right':
           i.x += 20;
@@ -68,6 +70,7 @@ export const snake = createReducer(initialState, {
       x: x,
       y: y,
       direction: lastItem.direction,
+      isVisible: false
     });
     return newState;
   },
