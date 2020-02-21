@@ -9,27 +9,14 @@ const initialState = [
   },
 ];
 
-const oppositeDirections = {
-  left: 'right',
-  right: 'left',
-  up: 'down',
-  down: 'up'
-};
-
 export const snake = createReducer(initialState, {
   [RESTART]() {
     return [{x: 0, y: 0, direction: 'right'}];
   },
-  [CHANGE_DIRECTION](state, action) {
-    if (state.length > 1 && oppositeDirections[state[0].direction] === action.direction)
-      return state;
-
+  [MOVE](state, action) {
     const newState = [...state];
     newState[0].direction = action.direction;
-    return newState;
-  },
-  [MOVE](state) {
-    return state.reverse().map((i, index) => {
+    return newState.reverse().map((i, index) => {
       switch (i.direction) {
         case 'right':
           i.x += 20;
@@ -45,10 +32,10 @@ export const snake = createReducer(initialState, {
           break;
       }
 
-      if (index === (state.length - 1))
+      if (index === (newState.length - 1))
         return i;
 
-      i.direction = state[index + 1].direction;
+      i.direction = newState[index + 1].direction;
       return i;
     }).reverse();
   },
@@ -78,4 +65,13 @@ export const snake = createReducer(initialState, {
     });
     return newState;
   },
+});
+
+export const headDirections = createReducer([], {
+  [RESTART]() {
+    return [];
+  },
+  [CHANGE_DIRECTION](state, action) {
+    return [...state, action.direction];
+  }
 });
