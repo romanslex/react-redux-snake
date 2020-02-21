@@ -1,14 +1,14 @@
 import {makeActionCreator} from '../helpers/makeActionCreator';
 import {getRandom} from '../helpers/getRandom';
 
-export const CHANGE_DIRECTION = 'CHANGE_DIRECTION';
+export const ADD_HEAD_DIRECTION = 'ADD_HEAD_DIRECTION';
 export const MOVE = 'MOVE';
 export const FOOD_EATEN = 'FOOD_EATEN';
 export const SET_GAME_OVER = 'SET_GAME_OVER';
 export const RESTART = 'RESTART';
 export const SET_HEAD_DIRECTIONS = 'SET_HEAD_DIRECTIONS';
 
-export const changeDirection = makeActionCreator(CHANGE_DIRECTION, 'direction');
+export const addHeadDirection = makeActionCreator(ADD_HEAD_DIRECTION, 'direction');
 export const move = makeActionCreator(MOVE, 'direction');
 export const foodEaten = makeActionCreator(FOOD_EATEN, 'x', 'y');
 export const setGameOver = makeActionCreator(SET_GAME_OVER, 'value');
@@ -17,54 +17,32 @@ export const setHeadDirections = makeActionCreator(SET_HEAD_DIRECTIONS, 'directi
 
 export const snakeMove = () => (dispatch, getState) => {
   const step = 20;
-  const {snake, food, headDirections} = getState();
-  let nextX = snake[0].x;
-  let nextY = snake[0].y;
+  const {snake, food} = getState();
+  const headDirections = [...getState().headDirections];
 
   let direction = snake[0].direction;
   if (headDirections.length > 0) {
     direction = headDirections.shift();
-    dispatch(setHeadDirections([...headDirections]));
-  }
-
-  switch (direction) {
-    case 'right':
-      nextX += step;
-      break;
-    case 'left':
-      nextX -= step;
-      break;
-    case 'up':
-      nextY -= step;
-      break;
-    case 'down':
-      nextY += step;
-      break;
-  }
-
-  if (nextY === food.y && nextX === food.x) {
-    let foodX = getRandom(0, 940);
-    let foodY = getRandom(0, 540);
-    foodX -= foodX % step;
-    foodY -= foodY % step;
-    dispatch(foodEaten(foodX, foodY));
-  }
-
-  snake.forEach(i => {
-    if (i.x === nextX && i.y === nextY) {
-      dispatch(setGameOver(true));
-    }
-  });
-
-  if ([-20, 960].includes(nextX) || [-20, 560].includes(nextY)) {
-    dispatch(setGameOver(true));
-    return;
+    dispatch(setHeadDirections(headDirections));
   }
 
   dispatch(move(direction));
+
+  if (snake[0].y === food.y && snake[0].x === food.x) {
+    eatFood(snake, step, dispatch);
+  }
+
+  if (checkForCollision(snake))
+    dispatch(setGameOver(true));
 };
 
-export const changeHeadDirection = direction => (dispatch, getState) => {
+export const addDirectionToQueue = direction => (dispatch, getState) => {
+  const oppositeDirections = {
+    left: 'right',
+    right: 'left',
+    up: 'down',
+    down: 'up'
+  };
   const {headDirections, snake} = getState();
 
   const lastItem = headDirections.length > 0
@@ -72,13 +50,45 @@ export const changeHeadDirection = direction => (dispatch, getState) => {
       : snake[0].direction;
 
   if (direction !== lastItem && oppositeDirections[direction] !== lastItem) {
-    dispatch(changeDirection(direction));
+    dispatch(addHeadDirection(direction));
   }
 };
 
-const oppositeDirections = {
-  left: 'right',
-  right: 'left',
-  up: 'down',
-  down: 'up'
+const eatFood = (snake, step, dispatch) => {
+  let flag = true;
+  let foodX, foodY;
+
+  while (flag){
+
+    foodX = getRandom(0, 240);
+    foodY = getRandom(0, 240);
+
+    foodX -= foodX % step;
+    foodY -= foodY % step;
+
+    const result = snake.filter(item => item.x === foodX && item.y === foodY);
+
+    if (result.length === 0)
+      flag = false;
+  }
+  dispatch(foodEaten(foodX, foodY));
+};
+
+
+const checkForCollision = (snake) => {
+  let isCollisionOccurred = false;
+
+  snake.forEach((i, index) => {
+    if (index === 0)
+      return;
+    if (i.x === snake[0].x && i.y === snake[0].y) {
+      isCollisionOccurred = true;
+    }
+  });
+
+  if ([-20, 260].includes(snake[0].x) || [-20, 260].includes(snake[0].y)) {
+    isCollisionOccurred = true;
+  }
+
+  return isCollisionOccurred;
 };

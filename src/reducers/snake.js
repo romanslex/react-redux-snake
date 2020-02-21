@@ -1,11 +1,18 @@
 import {createReducer} from '../helpers/createReducer';
-import {CHANGE_DIRECTION, FOOD_EATEN, MOVE, RESTART} from '../actions';
+import {
+  ADD_HEAD_DIRECTION,
+  FOOD_EATEN,
+  MOVE,
+  RESTART,
+  SET_HEAD_DIRECTIONS,
+} from '../actions';
 
 const initialState = [
   {
     x: 0,
     y: 0,
     direction: 'right',
+    isVisible: true
   },
 ];
 
@@ -17,6 +24,7 @@ export const snake = createReducer(initialState, {
     const newState = [...state];
     newState[0].direction = action.direction;
     return newState.reverse().map((i, index) => {
+      i.isVisible = true;
       switch (i.direction) {
         case 'right':
           i.x += 20;
@@ -62,6 +70,7 @@ export const snake = createReducer(initialState, {
       x: x,
       y: y,
       direction: lastItem.direction,
+      isVisible: false
     });
     return newState;
   },
@@ -71,7 +80,10 @@ export const headDirections = createReducer([], {
   [RESTART]() {
     return [];
   },
-  [CHANGE_DIRECTION](state, action) {
+  [ADD_HEAD_DIRECTION](state, action) {
     return [...state, action.direction];
+  },
+  [SET_HEAD_DIRECTIONS](state, action) {
+    return action.directions;
   }
 });

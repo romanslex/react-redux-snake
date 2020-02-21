@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import {connect} from 'react-redux';
 import './Snake.css';
 import {
-  changeHeadDirection,
+  addDirectionToQueue,
   snakeMove,
 } from '../../actions';
 
@@ -37,9 +37,9 @@ const Snake = ({snake, dispatch, isGameOver}) => {
           direction = 'right';
           break;
         default:
-          direction = 'stop';
+          direction = 'right';
       }
-      dispatch(changeHeadDirection(direction));
+      dispatch(addDirectionToQueue(direction));
     }
     document.addEventListener('keydown', changeDirection);
 
@@ -52,6 +52,7 @@ const Snake = ({snake, dispatch, isGameOver}) => {
             <div key={index} className="snake" style={{
               top: i.y + 'px',
               left: i.x + 'px',
+              display: i.isVisible ? 'block' : 'none'
             }}/>
         )}
       </>
