@@ -43,8 +43,8 @@ export const snakeMove = () => (dispatch, getState) => {
   }
 
   if (nextY === food.y && nextX === food.x) {
-    let foodX = getRandom(0, 940);
-    let foodY = getRandom(0, 540);
+    let foodX = getRandom(0, 240);
+    let foodY = getRandom(0, 240);
     foodX -= foodX % step;
     foodY -= foodY % step;
     dispatch(foodEaten(foodX, foodY));
@@ -56,7 +56,7 @@ export const snakeMove = () => (dispatch, getState) => {
     }
   });
 
-  if ([-20, 960].includes(nextX) || [-20, 560].includes(nextY)) {
+  if ([-20, 260].includes(nextX) || [-20, 260].includes(nextY)) {
     dispatch(setGameOver(true));
     return;
   }
