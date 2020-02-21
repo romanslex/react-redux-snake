@@ -20,46 +20,20 @@ export const snakeMove = () => (dispatch, getState) => {
   const {snake, food} = getState();
   const headDirections = [...getState().headDirections];
 
-  let nextX = snake[0].x;
-  let nextY = snake[0].y;
-
   let direction = snake[0].direction;
   if (headDirections.length > 0) {
     direction = headDirections.shift();
     dispatch(setHeadDirections(headDirections));
   }
 
-  switch (direction) {
-    case 'right':
-      nextX += step;
-      break;
-    case 'left':
-      nextX -= step;
-      break;
-    case 'up':
-      nextY -= step;
-      break;
-    case 'down':
-      nextY += step;
-      break;
-  }
-
-  snake.forEach(i => {
-    if (i.x === nextX && i.y === nextY) {
-      dispatch(setGameOver(true));
-    }
-  });
-
-  if ([-20, 260].includes(nextX) || [-20, 260].includes(nextY)) {
-    dispatch(setGameOver(true));
-    return;
-  }
-
   dispatch(move(direction));
 
-  if (nextY === food.y && nextX === food.x) {
+  if (snake[0].y === food.y && snake[0].x === food.x) {
     eatFood(snake, step, dispatch);
   }
+
+  if (checkForCollision(snake))
+    dispatch(setGameOver(true));
 };
 
 export const addDirectionToQueue = direction => (dispatch, getState) => {
@@ -98,4 +72,23 @@ const eatFood = (snake, step, dispatch) => {
       flag = false;
   }
   dispatch(foodEaten(foodX, foodY));
+};
+
+
+const checkForCollision = (snake) => {
+  let isCollisionOccurred = false;
+
+  snake.forEach((i, index) => {
+    if (index === 0)
+      return;
+    if (i.x === snake[0].x && i.y === snake[0].y) {
+      isCollisionOccurred = true;
+    }
+  });
+
+  if ([-20, 260].includes(snake[0].x) || [-20, 260].includes(snake[0].y)) {
+    isCollisionOccurred = true;
+  }
+
+  return isCollisionOccurred;
 };
