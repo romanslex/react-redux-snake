@@ -43,11 +43,7 @@ export const snakeMove = () => (dispatch, getState) => {
   }
 
   if (nextY === food.y && nextX === food.x) {
-    let foodX = getRandom(0, 240);
-    let foodY = getRandom(0, 240);
-    foodX -= foodX % step;
-    foodY -= foodY % step;
-    dispatch(foodEaten(foodX, foodY));
+    eatFood(snake, step, dispatch);
   }
 
   snake.forEach(i => {
@@ -65,6 +61,12 @@ export const snakeMove = () => (dispatch, getState) => {
 };
 
 export const changeHeadDirection = direction => (dispatch, getState) => {
+  const oppositeDirections = {
+    left: 'right',
+    right: 'left',
+    up: 'down',
+    down: 'up'
+  };
   const {headDirections, snake} = getState();
 
   const lastItem = headDirections.length > 0
@@ -76,9 +78,26 @@ export const changeHeadDirection = direction => (dispatch, getState) => {
   }
 };
 
-const oppositeDirections = {
-  left: 'right',
-  right: 'left',
-  up: 'down',
-  down: 'up'
+const eatFood = (snake, step, dispatch) => {
+  let flag = true;
+  let foodX, foodY;
+  console.group('before');
+
+  while (flag){
+    console.log('tick');
+
+    foodX = getRandom(0, 240);
+    foodY = getRandom(0, 240);
+
+    foodX -= foodX % step;
+    foodY -= foodY % step;
+
+    const result = snake.filter(item => item.x === foodX && item.y === foodY);
+    console.log({foodY, foodX, result, snake});
+
+    if (result.length === 0)
+      flag = false;
+  }
+  console.groupEnd();
+  dispatch(foodEaten(foodX, foodY));
 };
