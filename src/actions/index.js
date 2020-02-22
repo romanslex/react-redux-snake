@@ -1,56 +1,64 @@
 import {makeActionCreator} from '../helpers/makeActionCreator';
 import {getRandom} from '../helpers/getRandom';
 
-export const ADD_HEAD_DIRECTION = 'ADD_HEAD_DIRECTION';
+export const ADD_DIRECTION_TO_QUEUE = 'ADD_DIRECTION_TO_QUEUE';
 export const MOVE = 'MOVE';
 export const FOOD_EATEN = 'FOOD_EATEN';
 export const SET_GAME_OVER = 'SET_GAME_OVER';
 export const RESTART = 'RESTART';
-export const SET_HEAD_DIRECTIONS = 'SET_HEAD_DIRECTIONS';
+export const SET_DIRECTIONS_QUEUE = 'SET_DIRECTIONS_QUEUE';
+export const SET_CURRENT_DIRECTION = 'SET_CURRENT_DIRECTION';
 
-export const addHeadDirection = makeActionCreator(ADD_HEAD_DIRECTION, 'direction');
+export const addDirectionToQueue = makeActionCreator(ADD_DIRECTION_TO_QUEUE, 'direction');
 export const move = makeActionCreator(MOVE, 'direction');
 export const foodEaten = makeActionCreator(FOOD_EATEN, 'x', 'y');
 export const setGameOver = makeActionCreator(SET_GAME_OVER, 'value');
 export const restart = makeActionCreator(RESTART);
-export const setHeadDirections = makeActionCreator(SET_HEAD_DIRECTIONS, 'directions');
+export const setDirectionsQueue = makeActionCreator(SET_DIRECTIONS_QUEUE, 'directions');
+export const setCurrentDirection = makeActionCreator(SET_CURRENT_DIRECTION, 'direction');
 
 export const snakeMove = () => (dispatch, getState) => {
   const step = 20;
   const {snake, food} = getState();
-  const headDirections = [...getState().headDirections];
+  const directionsQueue = [...snake.directionsQueue];
 
-  let direction = snake[0].direction;
-  if (headDirections.length > 0) {
-    direction = headDirections.shift();
-    dispatch(setHeadDirections(headDirections));
+  let direction = snake.currentDirection;
+  if (directionsQueue.length > 0) {
+    direction = directionsQueue.shift();
+    dispatch(setDirectionsQueue(directionsQueue));
+    dispatch(setCurrentDirection(direction));
   }
 
   dispatch(move(direction));
 
-  if (snake[0].y === food.y && snake[0].x === food.x) {
-    eatFood(snake, step, dispatch);
+  const snakeBody = [...getState().snake.body];
+
+  if (snakeBody[0].y === food.y && snakeBody[0].x === food.x) {
+    eatFood(snakeBody, step, dispatch);
   }
 
-  if (checkForCollision(snake))
+  if (checkForCollision(snakeBody)) {
     dispatch(setGameOver(true));
+    return;
+  }
+
 };
 
-export const addDirectionToQueue = direction => (dispatch, getState) => {
+export const handleNewDirection = direction => (dispatch, getState) => {
   const oppositeDirections = {
     left: 'right',
     right: 'left',
     up: 'down',
     down: 'up'
   };
-  const {headDirections, snake} = getState();
+  const {snake} = getState();
 
-  const lastItem = headDirections.length > 0
-      ? headDirections[headDirections.length - 1]
-      : snake[0].direction;
+  const lastItem = snake.directionsQueue.length > 0
+      ? snake.directionsQueue[snake.directionsQueue.length - 1]
+      : snake.currentDirection;
 
   if (direction !== lastItem && oppositeDirections[direction] !== lastItem) {
-    dispatch(addHeadDirection(direction));
+    dispatch(addDirectionToQueue(direction));
   }
 };
 

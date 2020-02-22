@@ -1,89 +1,72 @@
 import {createReducer} from '../helpers/createReducer';
 import {
-  ADD_HEAD_DIRECTION,
+  ADD_DIRECTION_TO_QUEUE,
   FOOD_EATEN,
   MOVE,
-  RESTART,
-  SET_HEAD_DIRECTIONS,
+  RESTART, SET_CURRENT_DIRECTION,
+  SET_DIRECTIONS_QUEUE,
 } from '../actions';
+import {combineReducers} from 'redux';
 
-const initialState = [
-  {
-    x: 0,
-    y: 0,
-    direction: 'right',
-    isVisible: true
-  },
-];
+const bodyInitialState = [{x: 20,y: 0,}, {x: 0,y: 0,}];
 
-export const snake = createReducer(initialState, {
+const body = createReducer(bodyInitialState, {
   [RESTART]() {
-    return [{x: 0, y: 0, direction: 'right'}];
+    return [{x: 20,y: 0,}, {x: 0,y: 0,}];
   },
   [MOVE](state, action) {
     const newState = [...state];
-    newState[0].direction = action.direction;
-    return newState.reverse().map((i, index) => {
-      i.isVisible = true;
-      switch (i.direction) {
-        case 'right':
-          i.x += 20;
-          break;
-        case 'left':
-          i.x -= 20;
-          break;
-        case 'up':
-          i.y -= 20;
-          break;
-        case 'down':
-          i.y += 20;
-          break;
-      }
+    newState.pop();
 
-      if (index === (newState.length - 1))
-        return i;
-
-      i.direction = newState[index + 1].direction;
-      return i;
-    }).reverse();
+    const newItem = {...newState[0]};
+    switch (action.direction) {
+      case 'right':
+        newItem.x += 20;
+        break;
+      case 'left':
+        newItem.x -= 20;
+        break;
+      case 'up':
+        newItem.y -= 20;
+        break;
+      case 'down':
+        newItem.y += 20;
+        break;
+    }
+    newState.unshift(newItem);
+    return newState;
   },
   [FOOD_EATEN](state) {
     const newState = [...state];
-    const lastItem = newState[newState.length - 1];
-    let x = lastItem.x;
-    let y = lastItem.y;
-    switch (lastItem.direction) {
-      case 'right':
-        x = lastItem.x - 20;
-        break;
-      case 'left':
-        x = lastItem.x + 20;
-        break;
-      case 'up':
-        y = lastItem.y + 20;
-        break;
-      case 'down':
-        y = lastItem.y - 20;
-        break;
-    }
-    newState.push({
-      x: x,
-      y: y,
-      direction: lastItem.direction,
-      isVisible: false
-    });
+    newState.push({...newState[newState.length - 1]});
     return newState;
   },
 });
 
-export const headDirections = createReducer([], {
+const directionsQueue = createReducer([], {
   [RESTART]() {
     return [];
   },
-  [ADD_HEAD_DIRECTION](state, action) {
+  [ADD_DIRECTION_TO_QUEUE](state, action) {
     return [...state, action.direction];
   },
-  [SET_HEAD_DIRECTIONS](state, action) {
+  [SET_DIRECTIONS_QUEUE](state, action) {
     return action.directions;
+  },
+});
+
+const currentDirection = createReducer('right', {
+  [RESTART]() {
+    return 'right';
+  },
+  [SET_CURRENT_DIRECTION](state, action) {
+    return action.direction;
   }
 });
+
+export const snake = combineReducers({
+  directionsQueue,
+  body,
+  currentDirection,
+});
+
