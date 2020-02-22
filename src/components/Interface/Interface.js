@@ -16,6 +16,6 @@ const Interface = ({snakeLength, dispatch}) => {
 };
 
 export default connect(
-    state => ({snakeLength: state.snake.length})
+    state => ({snakeLength: state.snake.body.length})
 )(Interface);
 
