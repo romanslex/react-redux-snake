@@ -17,7 +17,7 @@ export const setHeadDirections = makeActionCreator(SET_HEAD_DIRECTIONS, 'directi
 
 export const snakeMove = () => (dispatch, getState) => {
   const step = 20;
-  const {snake, food} = getState();
+  let {snake, food} = getState();
   const headDirections = [...getState().headDirections];
 
   let direction = snake[0].direction;
@@ -28,12 +28,17 @@ export const snakeMove = () => (dispatch, getState) => {
 
   dispatch(move(direction));
 
+  snake = [...getState().snake];
+
   if (snake[0].y === food.y && snake[0].x === food.x) {
     eatFood(snake, step, dispatch);
   }
 
-  if (checkForCollision(snake))
+  if (checkForCollision(snake)) {
     dispatch(setGameOver(true));
+    return;
+  }
+
 };
 
 export const addDirectionToQueue = direction => (dispatch, getState) => {
@@ -82,11 +87,13 @@ const checkForCollision = (snake) => {
     if (index === 0)
       return;
     if (i.x === snake[0].x && i.y === snake[0].y) {
+      debugger;
       isCollisionOccurred = true;
     }
   });
 
   if ([-20, 260].includes(snake[0].x) || [-20, 260].includes(snake[0].y)) {
+    debugger;
     isCollisionOccurred = true;
   }
 

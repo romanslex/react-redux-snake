@@ -52,7 +52,6 @@ const Snake = ({snake, dispatch, isGameOver}) => {
             <div key={index} className="snake" style={{
               top: i.y + 'px',
               left: i.x + 'px',
-              display: i.isVisible ? 'block' : 'none'
             }}/>
         )}
       </>
