@@ -37,7 +37,7 @@ const Snake = ({snakeBody, dispatch, isGameOver}) => {
           direction = 'right';
           break;
         default:
-          direction = 'right';
+          direction = 'incorrect';
       }
       dispatch(handleNewDirection(direction));
     }

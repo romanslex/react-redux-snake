@@ -57,7 +57,7 @@ export const handleNewDirection = direction => (dispatch, getState) => {
       ? snake.directionsQueue[snake.directionsQueue.length - 1]
       : snake.currentDirection;
 
-  if (direction !== lastItem && oppositeDirections[direction] !== lastItem) {
+  if (direction !== lastItem && oppositeDirections[direction] !== lastItem && direction !== 'incorrect') {
     dispatch(addDirectionToQueue(direction));
   }
 };
