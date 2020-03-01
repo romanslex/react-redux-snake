@@ -1,5 +1,5 @@
 import {createReducer} from '../helpers/createReducer';
-import {FOOD_EATEN, RESTART} from '../actions';
+import {SET_FOOD, RESTART} from '../actions';
 
 const initialState = {
   x: 20,
@@ -10,7 +10,7 @@ export const food = createReducer(initialState, {
   [RESTART]() {
     return {...initialState};
   },
-  [FOOD_EATEN](state, action) {
+  [SET_FOOD](state, action) {
     return {x: action.x, y: action.y};
   }
 });

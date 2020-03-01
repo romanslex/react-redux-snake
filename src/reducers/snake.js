@@ -1,7 +1,7 @@
 import {createReducer} from '../helpers/createReducer';
 import {
   ADD_DIRECTION_TO_QUEUE,
-  FOOD_EATEN,
+  INCREASE_SNAKE,
   MOVE,
   RESTART, SET_CURRENT_DIRECTION,
   SET_DIRECTIONS_QUEUE,
@@ -36,7 +36,7 @@ const body = createReducer(bodyInitialState, {
     newState.unshift(newItem);
     return newState;
   },
-  [FOOD_EATEN](state) {
+  [INCREASE_SNAKE](state) {
     const newState = [...state];
     newState.push({...newState[newState.length - 1]});
     return newState;

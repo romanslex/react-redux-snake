@@ -3,22 +3,23 @@ import {getRandom} from '../helpers/getRandom';
 
 export const ADD_DIRECTION_TO_QUEUE = 'ADD_DIRECTION_TO_QUEUE';
 export const MOVE = 'MOVE';
-export const FOOD_EATEN = 'FOOD_EATEN';
+export const SET_FOOD = 'SET_FOOD';
 export const SET_GAME_OVER = 'SET_GAME_OVER';
 export const RESTART = 'RESTART';
 export const SET_DIRECTIONS_QUEUE = 'SET_DIRECTIONS_QUEUE';
 export const SET_CURRENT_DIRECTION = 'SET_CURRENT_DIRECTION';
+export const INCREASE_SNAKE = 'INCREASE_SNAKE';
 
 export const addDirectionToQueue = makeActionCreator(ADD_DIRECTION_TO_QUEUE, 'direction');
 export const move = makeActionCreator(MOVE, 'direction');
-export const foodEaten = makeActionCreator(FOOD_EATEN, 'x', 'y');
+export const setFood = makeActionCreator(SET_FOOD, 'x', 'y');
 export const setGameOver = makeActionCreator(SET_GAME_OVER, 'value');
 export const restart = makeActionCreator(RESTART);
 export const setDirectionsQueue = makeActionCreator(SET_DIRECTIONS_QUEUE, 'directions');
 export const setCurrentDirection = makeActionCreator(SET_CURRENT_DIRECTION, 'direction');
+export const increaseSnake = makeActionCreator(INCREASE_SNAKE);
 
 export const snakeMove = () => (dispatch, getState) => {
-  const step = 20;
   const {snake, food} = getState();
   const directionsQueue = [...snake.directionsQueue];
 
@@ -34,7 +35,9 @@ export const snakeMove = () => (dispatch, getState) => {
   const snakeBody = [...getState().snake.body];
 
   if (snakeBody[0].y === food.y && snakeBody[0].x === food.x) {
-    eatFood(snakeBody, step, dispatch);
+    const {x, y} = generateFoodCoords(snakeBody);
+    dispatch(setFood(x, y));
+    dispatch(increaseSnake());
   }
 
   if (checkForCollision(snakeBody)) {
@@ -62,9 +65,11 @@ export const handleNewDirection = direction => (dispatch, getState) => {
   }
 };
 
-const eatFood = (snake, step, dispatch) => {
+
+const generateFoodCoords = (snake) => {
   let flag = true;
   let foodX, foodY;
+  const step = 20;
 
   while (flag){
 
@@ -79,7 +84,8 @@ const eatFood = (snake, step, dispatch) => {
     if (result.length === 0)
       flag = false;
   }
-  dispatch(foodEaten(foodX, foodY));
+
+  return {x: foodX, y: foodY};
 };
 
 
