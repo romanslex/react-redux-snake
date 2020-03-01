@@ -13,7 +13,7 @@ const Snake = ({snakeBody, dispatch, isGameOver}) => {
     if (!isGameOver) {
       interval = setInterval(() => {
         dispatch(snakeMove());
-      }, 80);
+      }, 120);
     } else {
       clearInterval(interval);
     }
