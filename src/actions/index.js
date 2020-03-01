@@ -84,19 +84,12 @@ const eatFood = (snake, step, dispatch) => {
 
 
 const checkForCollision = (snake) => {
-  let isCollisionOccurred = false;
-
-  snake.forEach((i, index) => {
-    if (index === 0)
-      return;
-    if (i.x === snake[0].x && i.y === snake[0].y) {
-      isCollisionOccurred = true;
+  const {x: headX, y: headY} = snake[0];
+  for (let i = 1; i < snake.length; i++) {
+    if(snake[i].x === headX && snake[i].y === headY) {
+      return true;
     }
-  });
-
-  if ([-20, 260].includes(snake[0].x) || [-20, 260].includes(snake[0].y)) {
-    isCollisionOccurred = true;
   }
 
-  return isCollisionOccurred;
+  return [-20, 260].includes(snake[0].x) || [-20, 260].includes(snake[0].y);
 };
