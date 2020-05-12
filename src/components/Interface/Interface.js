@@ -3,6 +3,7 @@ import './Interface.css';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
+import { getSnakeLength } from '../../selectors/snake';
 import { restart } from '../../actions';
 
 const Interface = ({ snakeLength, restart }) => {
@@ -25,7 +26,7 @@ Interface.propTypes = {
 };
 
 export default connect(
-  (state) => ({ snakeLength: state.snake.body.length }),
+  (state) => ({ snakeLength: getSnakeLength(state) }),
   (dispatch) => ({
     restart: () => dispatch(restart()),
   })
