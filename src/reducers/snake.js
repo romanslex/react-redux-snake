@@ -1,24 +1,32 @@
-import {createReducer} from '../helpers/createReducer';
 import {
   ADD_DIRECTION_TO_QUEUE,
   INCREASE_SNAKE,
   MOVE,
-  RESTART, SET_CURRENT_DIRECTION,
+  RESTART,
+  SET_CURRENT_DIRECTION,
   SET_DIRECTIONS_QUEUE,
 } from '../actions';
-import {combineReducers} from 'redux';
 
-const bodyInitialState = [{x: 20,y: 0,}, {x: 0,y: 0,}];
+import { combineReducers } from 'redux';
+import { createReducer } from '../helpers/createReducer';
+
+const bodyInitialState = [
+  { x: 20, y: 0 },
+  { x: 0, y: 0 },
+];
 
 const body = createReducer(bodyInitialState, {
   [RESTART]() {
-    return [{x: 20,y: 0,}, {x: 0,y: 0,}];
+    return [
+      { x: 20, y: 0 },
+      { x: 0, y: 0 },
+    ];
   },
   [MOVE](state, action) {
     const newState = [...state];
     newState.pop();
 
-    const newItem = {...newState[0]};
+    const newItem = { ...newState[0] };
     switch (action.direction) {
       case 'right':
         newItem.x += 20;
@@ -38,7 +46,7 @@ const body = createReducer(bodyInitialState, {
   },
   [INCREASE_SNAKE](state) {
     const newState = [...state];
-    newState.push({...newState[newState.length - 1]});
+    newState.push({ ...newState[newState.length - 1] });
     return newState;
   },
 });
@@ -61,7 +69,7 @@ const currentDirection = createReducer('right', {
   },
   [SET_CURRENT_DIRECTION](state, action) {
     return action.direction;
-  }
+  },
 });
 
 export const snake = combineReducers({
@@ -69,4 +77,3 @@ export const snake = combineReducers({
   body,
   currentDirection,
 });
-

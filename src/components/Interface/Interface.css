@@ -1,10 +1,10 @@
 .interface {
-    margin-bottom: 20px;
-    display: flex;
-    justify-content: space-between;
-    width: 300px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  width: 300px;
 }
 
 .interface__btn {
-    font-size: 20px;
+  font-size: 20px;
 }
