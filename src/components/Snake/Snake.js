@@ -5,6 +5,8 @@ import { handleNewDirection, snakeMove } from '../../actions';
 
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { getSnakeBody } from '../../selectors/snake';
+import { isGameOver } from '../../selectors/general';
 
 const Snake = ({ snakeBody, snakeMove, handleNewDirection, isGameOver }) => {
   useEffect(() => {
@@ -70,8 +72,8 @@ Snake.propTypes = {
 
 export default connect(
   (state) => ({
-    snakeBody: state.snake.body,
-    isGameOver: state.general.isGameOver,
+    snakeBody: getSnakeBody(state),
+    isGameOver: isGameOver(state),
   }),
   (dispatch) => ({
     snakeMove: () => dispatch(snakeMove()),
