@@ -1,12 +1,14 @@
-import React from 'react';
 import Field from './Field/Field';
 import Interface from './Interface/Interface';
+import React from 'react';
 
-export default () => {
+const App = () => {
   return (
     <div className="app">
-      <Interface/>
-      <Field/>
+      <Interface />
+      <Field />
     </div>
   );
 };
+
+export default App;

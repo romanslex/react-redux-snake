@@ -1,13 +1,16 @@
-import React from 'react';
 import './Field.css';
-import Snake from '../Snake/Snake';
-import Food from '../Food/Food';
 
-export default () => {
+import Food from '../Food/Food';
+import React from 'react';
+import Snake from '../Snake/Snake';
+
+const Field = () => {
   return (
-      <div className="field">
-        <Snake/>
-        <Food/>
-      </div>
+    <div className="field">
+      <Snake />
+      <Food />
+    </div>
   );
 };
+
+export default Field;

@@ -1,16 +1,23 @@
-import React from 'react';
-import {connect} from 'react-redux';
 import './Food.css';
 
-const Food = ({food}) => {
+import PropTypes from 'prop-types';
+import React from 'react';
+import { connect } from 'react-redux';
+
+const Food = ({ food }) => {
   return (
-      <div className="food" style={{
+    <div
+      className="food"
+      style={{
         top: food.y + 'px',
-        left: food.x + 'px'
-      }}/>
+        left: food.x + 'px',
+      }}
+    />
   );
 };
 
-export default connect(
-    state => ({food: state.food})
-)(Food);
+Food.propTypes = {
+  food: PropTypes.object,
+};
+
+export default connect((state) => ({ food: state.food }))(Food);

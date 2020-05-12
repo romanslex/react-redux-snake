@@ -1,13 +1,12 @@
-import React, {useEffect} from 'react';
-import {connect} from 'react-redux';
 import './Snake.css';
-import {
-  handleNewDirection,
-  snakeMove,
-} from '../../actions';
 
-const Snake = ({snakeBody, dispatch, isGameOver}) => {
+import React, { useEffect } from 'react';
+import { handleNewDirection, snakeMove } from '../../actions';
 
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+
+const Snake = ({ snakeBody, dispatch, isGameOver }) => {
   useEffect(() => {
     let interval;
     if (!isGameOver) {
@@ -47,20 +46,28 @@ const Snake = ({snakeBody, dispatch, isGameOver}) => {
   }, [dispatch]);
 
   return (
-      <>
-        {snakeBody.map((i, index) =>
-            <div key={index} className="snake" style={{
-              top: i.y + 'px',
-              left: i.x + 'px',
-            }}/>
-        )}
-      </>
+    <>
+      {snakeBody.map((i, index) => (
+        <div
+          key={index}
+          className="snake"
+          style={{
+            top: i.y + 'px',
+            left: i.x + 'px',
+          }}
+        />
+      ))}
+    </>
   );
 };
 
-export default connect(
-    state => ({
-      snakeBody: state.snake.body,
-      isGameOver: state.general.isGameOver
-    }),
-)(Snake);
+Snake.propTypes = {
+  snakeBody: PropTypes.array,
+  dispatch: PropTypes.func,
+  isGameOver: PropTypes.bool,
+};
+
+export default connect((state) => ({
+  snakeBody: state.snake.body,
+  isGameOver: state.general.isGameOver,
+}))(Snake);
