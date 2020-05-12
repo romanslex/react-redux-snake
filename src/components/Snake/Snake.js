@@ -6,18 +6,18 @@ import { handleNewDirection, snakeMove } from '../../actions';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-const Snake = ({ snakeBody, dispatch, isGameOver }) => {
+const Snake = ({ snakeBody, snakeMove, handleNewDirection, isGameOver }) => {
   useEffect(() => {
     let interval;
     if (!isGameOver) {
       interval = setInterval(() => {
-        dispatch(snakeMove());
+        snakeMove();
       }, 120);
     } else {
       clearInterval(interval);
     }
     return () => clearInterval(interval);
-  }, [dispatch, isGameOver]);
+  }, [isGameOver]);
 
   useEffect(() => {
     function changeDirection(event) {
@@ -38,12 +38,12 @@ const Snake = ({ snakeBody, dispatch, isGameOver }) => {
         default:
           direction = 'incorrect';
       }
-      dispatch(handleNewDirection(direction));
+      handleNewDirection(direction);
     }
     document.addEventListener('keydown', changeDirection);
 
     return () => document.removeEventListener('keydown', changeDirection);
-  }, [dispatch]);
+  }, []);
 
   return (
     <>
@@ -63,11 +63,18 @@ const Snake = ({ snakeBody, dispatch, isGameOver }) => {
 
 Snake.propTypes = {
   snakeBody: PropTypes.array,
-  dispatch: PropTypes.func,
   isGameOver: PropTypes.bool,
+  snakeMove: PropTypes.func,
+  handleNewDirection: PropTypes.func,
 };
 
-export default connect((state) => ({
-  snakeBody: state.snake.body,
-  isGameOver: state.general.isGameOver,
-}))(Snake);
+export default connect(
+  (state) => ({
+    snakeBody: state.snake.body,
+    isGameOver: state.general.isGameOver,
+  }),
+  (dispatch) => ({
+    snakeMove: () => dispatch(snakeMove()),
+    handleNewDirection: (direction) => dispatch(handleNewDirection(direction)),
+  })
+)(Snake);

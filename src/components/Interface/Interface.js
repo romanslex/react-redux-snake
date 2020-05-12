@@ -5,10 +5,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { restart } from '../../actions';
 
-const Interface = ({ snakeLength, dispatch }) => {
+const Interface = ({ snakeLength, restart }) => {
   return (
     <div className="interface">
-      <button className="interface__btn" onClick={() => dispatch(restart())}>
+      <button className="interface__btn" onClick={() => restart()}>
         Начать игру
       </button>
       <div className="interface__score">
@@ -21,9 +21,12 @@ const Interface = ({ snakeLength, dispatch }) => {
 
 Interface.propTypes = {
   snakeLength: PropTypes.number,
-  dispatch: PropTypes.func,
+  restart: PropTypes.func,
 };
 
-export default connect((state) => ({ snakeLength: state.snake.body.length }))(
-  Interface
-);
+export default connect(
+  (state) => ({ snakeLength: state.snake.body.length }),
+  (dispatch) => ({
+    restart: () => dispatch(restart()),
+  })
+)(Interface);
