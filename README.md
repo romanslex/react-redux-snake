@@ -2,7 +2,7 @@
 
 Игра змейка.
 
-![Screenshot](https://github.com/romanslex/react-redux-snake/blob/master/snake.PNG?raw=true)
+![Screenshot](https://github.com/romanslex/react-redux-snake/blob/master/snake-v2.PNG?raw=true)
 
 ## Запустить
 
